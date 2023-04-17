@@ -12,6 +12,7 @@ djangorestframework = "^3.14.0"
 python-dotenv = "^1.0.0"
 pre-commit = "^3.2.2"
 psycopg2-binary = "^2.9.6"
+django-filter = "^23.1"
 
 
 [build-system]
