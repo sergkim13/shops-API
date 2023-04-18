@@ -1,11 +1,18 @@
-from django.forms import ModelChoiceField
-from django_filters import FilterSet, CharFilter
-from shops_api.shops.models import City, Shop
+from django.utils import timezone
+from django_filters import FilterSet, CharFilter, ChoiceFilter
+from shops_api.shops.models import Shop
+
+
+STATUS_CHOICES = (
+    (0, 'Shop is closed'),
+    (1, 'Shop is open'),
+)
 
 
 class ShopFilter(FilterSet):
     city = CharFilter(method='filter_by_city', label='City')
     street = CharFilter(method='filter_by_street', label='Street')
+    open = ChoiceFilter(method='filter_by_open', label='Open now', choices=STATUS_CHOICES)
 
     def filter_by_city(self, queryset, name, value):
         try:
@@ -25,6 +32,14 @@ class ShopFilter(FilterSet):
             street_name = value.strip().capitalize()
             return queryset.filter(street__name__iexact=street_name)
 
+    def filter_by_open(self, queryset, name, value):
+        now = timezone.now().time()
+        value = int(value)
+        if value:
+            return queryset.filter(opening_time__lte=now).filter(closing_time__gte=now)
+        else:
+            return queryset.exclude(opening_time__lte=now).exclude(closing_time__gte=now)
+
     class Meta:
         model = Shop
-        fields = ('city', 'street')
+        fields = ('city', 'street', 'open')
