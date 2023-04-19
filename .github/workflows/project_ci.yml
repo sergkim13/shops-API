@@ -23,6 +23,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
+      - name: Add pip to PATH
+        run: echo "::add-path::/home/runner/.local/bin"
       - run: pip install poetry==1.2.0
       - run: make install
       - name: run pre-commit hooks
