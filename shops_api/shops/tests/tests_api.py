@@ -9,9 +9,12 @@ from shops_api.shops.serializers import CitySerializer, ShopSerializer, StreetSe
 
 
 class ShopAPITestCase(APITestCase):
+    '''Test cases for ShopAPI.'''
+
     fixtures = ['cities.json', 'streets.json', 'shops.json']
 
     def setUp(self):
+        '''Fixtures test setup.'''
         self.fixture_city_1 = City.objects.get(id=1)
         self.fixture_city_2 = City.objects.get(id=2)
         self.fixture_street_1 = Street.objects.get(id=1)
@@ -24,6 +27,8 @@ class ShopAPITestCase(APITestCase):
         self.fixture_shop_4 = Shop.objects.get(id=4)
 
     def test_get_cities(self):
+        '''Checks normal work of `get citites` method.'''
+
         expected_data = CitySerializer([self.fixture_city_1, self.fixture_city_2], many=True).data
 
         url = reverse('cities')
@@ -33,6 +38,8 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(expected_data, response.data)
 
     def test_get_cities_empty(self):
+        '''Checks work of `get citites` method with empty result.'''
+
         Shop.objects.all().delete()
         Street.objects.all().delete()
         City.objects.all().delete()
@@ -43,6 +50,8 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual([], response.data)
 
     def test_get_streets(self):
+        '''Checks work of `get streets` method.'''
+
         url_1 = reverse('streets', kwargs={'city_id': self.fixture_city_1.id})
         url_2 = reverse('streets', kwargs={'city_id': self.fixture_city_2.id})
         url_3 = reverse('streets', kwargs={'city_id': 3})  # not existing city
@@ -61,6 +70,8 @@ class ShopAPITestCase(APITestCase):
 
     @freeze_time('2023-04-18 19:30')
     def test_get_shops(self):
+        '''Checks work of `get shops` method.'''
+
         url = reverse('shops')
         response_1 = self.client.get(url)
         response_2 = self.client.get(url, data={'city': 1})
@@ -97,8 +108,10 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(expected_data_8, response_8.data)
 
     def test_post_shop(self):
+        '''Checks work of `post shop` method.'''
+
         Shop.objects.all().delete()
-        new_shop_data = {
+        correct_shop_data = {
             'name': 'New shop',
             'city': 'City 1',
             'street': 'Street 1',
@@ -106,19 +119,30 @@ class ShopAPITestCase(APITestCase):
             'opening_time': '09:00:00',
             'closing_time': '19:00:00'
         }
+        incorrect_shop_data = {
+            'name': 'New shop',
+            'city': 'City 1',
+            'street': 'Street 4',
+            'building': 99,
+            'opening_time': '09:00:00',
+            'closing_time': '19:00:00'
+        }
         url = reverse('shops')
-        response_1 = self.client.post(url, data=new_shop_data)
-        response_2 = self.client.post(url, data=new_shop_data)
+        response_1 = self.client.post(url, data=correct_shop_data)
+        response_2 = self.client.post(url, data=correct_shop_data)
+        response_3 = self.client.post(url, data=incorrect_shop_data)
         created_shop = Shop.objects.get(id=response_1.data['id'])
 
+        # Checks normal work of post shop method
         self.assertEqual(HTTPStatus.CREATED, response_1.status_code)
-        self.assertEqual(new_shop_data['name'], created_shop.name)
-        self.assertEqual(new_shop_data['city'], created_shop.city.name)
-        self.assertEqual(new_shop_data['street'], created_shop.street.name)
-        self.assertEqual(new_shop_data['building'], created_shop.building)
-        self.assertEqual(new_shop_data['opening_time'], str(created_shop.opening_time))
-        self.assertEqual(new_shop_data['closing_time'], str(created_shop.closing_time))
+        self.assertEqual(correct_shop_data['name'], created_shop.name)
+        self.assertEqual(correct_shop_data['city'], created_shop.city.name)
+        self.assertEqual(correct_shop_data['street'], created_shop.street.name)
+        self.assertEqual(correct_shop_data['building'], created_shop.building)
+        self.assertEqual(correct_shop_data['opening_time'], str(created_shop.opening_time))
+        self.assertEqual(correct_shop_data['closing_time'], str(created_shop.closing_time))
 
+        # Checks work of post shop method with unique constraint
         self.assertEqual(HTTPStatus.BAD_REQUEST, response_2.status_code)
         self.assertEqual(
             {
@@ -127,4 +151,13 @@ class ShopAPITestCase(APITestCase):
                 ]
             },
             response_2.json()
+        )
+
+        # Checks work of post shop method with wrong street in body
+        self.assertEqual(HTTPStatus.BAD_REQUEST, response_3.status_code)
+        self.assertEqual(
+            {
+                'detail': 'The street does not belong to the selected city.'
+            },
+            response_3.json()
         )

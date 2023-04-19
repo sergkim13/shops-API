@@ -2,7 +2,7 @@ install:
 	poetry install
 
 test:
-	poetry run pytest -vv
+	poetry run ./manage.py test
 
 hooks:
 	poetry run pre-commit run --all-files
