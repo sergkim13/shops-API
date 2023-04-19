@@ -35,6 +35,7 @@ class Shop(models.Model):
     class Meta:
         verbose_name = 'shop'
         verbose_name_plural = 'shops'
+        unique_together = ('name', 'city', 'street', 'building')
 
     def __str__(self):
         return self.name
