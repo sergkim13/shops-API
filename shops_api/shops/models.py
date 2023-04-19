@@ -1,4 +1,5 @@
 from django.db import models
+from django.forms import ValidationError
 
 
 class City(models.Model):
@@ -31,6 +32,11 @@ class Shop(models.Model):
     building = models.PositiveIntegerField(verbose_name='building')
     opening_time = models.TimeField(verbose_name='opening_time')
     closing_time = models.TimeField(verbose_name='closing_time')
+
+    def clean(self):
+        super().clean()
+        if self.street.city != self.city:
+            raise ValidationError('The street does not belong to the selected city.')
 
     class Meta:
         verbose_name = 'shop'

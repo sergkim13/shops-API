@@ -26,8 +26,13 @@ class ShopSerializer(serializers.ModelSerializer):
     street = serializers.SlugRelatedField(slug_field='name', queryset=Street.objects.all())
 
     def create(self, validated_data):
-        '''Overridden `create` method for validating only primary key of just created `Shop` object.'''
-        shop = super().create(validated_data)
+        '''
+        Overridden `create` method which is calling `Shop` model's `clean' method for
+        activating compatibility checking of `city` and `street`.
+        '''
+        shop = Shop(**validated_data)
+        shop.clean()
+        shop.save()
         return shop.id
 
     class Meta:

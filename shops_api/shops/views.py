@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -36,5 +37,8 @@ class ShopAPIView(generics.ListCreateAPIView):
         '''Overridden `create` method for returning only primary key of just created `Shop` object.'''
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        product_id = serializer.save()
-        return Response({'id': product_id}, status=status.HTTP_201_CREATED)
+        try:
+            product_id = serializer.save()
+            return Response({'id': product_id}, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return Response({'detail': e.message}, status=status.HTTP_400_BAD_REQUEST)
