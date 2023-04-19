@@ -95,3 +95,25 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(expected_data_6, response_6.data)
         self.assertEqual(expected_data_7, response_7.data)
         self.assertEqual(expected_data_8, response_8.data)
+
+    def test_post_shop(self):
+        Shop.objects.all().delete()
+        new_shop_data = {
+            'name': 'New shop',
+            'city': 'City 1',
+            'street': 'Street 1',
+            'building': 99,
+            'opening_time': '09:00:00',
+            'closing_time': '19:00:00'
+        }
+        url = reverse('shops')
+        response = self.client.post(url, data=new_shop_data)
+        created_shop = Shop.objects.get(id=response.data['id'])
+        print(created_shop)
+        self.assertEqual(HTTPStatus.CREATED, response.status_code)
+        self.assertEqual(new_shop_data['name'], created_shop.name)
+        self.assertEqual(new_shop_data['city'], created_shop.city.name)
+        self.assertEqual(new_shop_data['street'], created_shop.street.name)
+        self.assertEqual(new_shop_data['building'], created_shop.building)
+        self.assertEqual(new_shop_data['opening_time'], str(created_shop.opening_time))
+        self.assertEqual(new_shop_data['closing_time'], str(created_shop.closing_time))
