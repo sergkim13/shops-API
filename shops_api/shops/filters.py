@@ -10,11 +10,16 @@ STATUS_CHOICES = (
 
 
 class ShopFilter(FilterSet):
+    '''Filter class for handling filtering query parameters.'''
     city = CharFilter(method='filter_by_city', label='City')
     street = CharFilter(method='filter_by_street', label='Street')
     open = ChoiceFilter(method='filter_by_open', label='Open now', choices=STATUS_CHOICES)
 
     def filter_by_city(self, queryset, name, value):
+        '''
+        Filtering method for handling `city` query parameter.
+        Allows to filter by `City` id or `City` name.
+        '''
         try:
             city_id = int(value)
             return queryset.filter(city_id=city_id)
@@ -25,6 +30,10 @@ class ShopFilter(FilterSet):
     street = CharFilter(field_name='street', method='filter_by_street')
 
     def filter_by_street(self, queryset, name, value):
+        '''
+        Filtering method for handling `stret` query parameter.
+        Allows to filter by `Street` id or `Street` name.
+        '''
         try:
             street_id = int(value)
             return queryset.filter(street_id=street_id)
@@ -33,6 +42,11 @@ class ShopFilter(FilterSet):
             return queryset.filter(street__name__iexact=street_name)
 
     def filter_by_open(self, queryset, name, value):
+        '''
+        Filtering method for handling `open` query parameter.
+        Allows to filter shops which open or closed in current time - depends on
+        `opening_time` and `closing_time` of `Shop` object.
+        '''
         now = timezone.now().time()
         value = int(value)
         if value:
