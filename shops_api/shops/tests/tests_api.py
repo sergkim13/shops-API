@@ -107,13 +107,24 @@ class ShopAPITestCase(APITestCase):
             'closing_time': '19:00:00'
         }
         url = reverse('shops')
-        response = self.client.post(url, data=new_shop_data)
-        created_shop = Shop.objects.get(id=response.data['id'])
-        print(created_shop)
-        self.assertEqual(HTTPStatus.CREATED, response.status_code)
+        response_1 = self.client.post(url, data=new_shop_data)
+        response_2 = self.client.post(url, data=new_shop_data)
+        created_shop = Shop.objects.get(id=response_1.data['id'])
+
+        self.assertEqual(HTTPStatus.CREATED, response_1.status_code)
         self.assertEqual(new_shop_data['name'], created_shop.name)
         self.assertEqual(new_shop_data['city'], created_shop.city.name)
         self.assertEqual(new_shop_data['street'], created_shop.street.name)
         self.assertEqual(new_shop_data['building'], created_shop.building)
         self.assertEqual(new_shop_data['opening_time'], str(created_shop.opening_time))
         self.assertEqual(new_shop_data['closing_time'], str(created_shop.closing_time))
+
+        self.assertEqual(HTTPStatus.BAD_REQUEST, response_2.status_code)
+        self.assertEqual(
+            {
+                'non_field_errors': [
+                    'The fields name, city, street, building must make a unique set.'
+                ]
+            },
+            response_2.json()
+        )
