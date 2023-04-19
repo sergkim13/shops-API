@@ -1,0 +1,50 @@
+[
+    {
+        "model": "shops.Shop",
+        "pk": 1,
+        "fields": {
+            "name": "Shop 1",
+            "city": 1,
+            "street": 1,
+            "building": 1,
+            "opening_time": "09:00",
+            "closing_time": "19:00"
+        }
+    },
+    {
+        "model": "shops.Shop",
+        "pk": 2,
+        "fields": {
+            "name": "Shop 2",
+            "city": 1,
+            "street": 2,
+            "building": 1,
+            "opening_time": "12:00",
+            "closing_time": "23:00"
+        }
+    },
+    {
+        "model": "shops.Shop",
+        "pk": 3,
+        "fields": {
+            "name": "Shop 3",
+            "city": 2,
+            "street": 3,
+            "building": 1,
+            "opening_time": "00:00",
+            "closing_time": "20:00"
+        }
+    },
+    {
+        "model": "shops.Shop",
+        "pk": 4,
+        "fields": {
+            "name": "Shop 4",
+            "city": 2,
+            "street": 4,
+            "building": 1,
+            "opening_time": "07:00",
+            "closing_time": "18:00"
+        }
+    }
+]

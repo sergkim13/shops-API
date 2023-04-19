@@ -1,0 +1,16 @@
+[
+    {
+        "model": "shops.City",
+        "pk": 1,
+        "fields": {
+            "name": "City 1"
+        }
+    },
+    {
+        "model": "shops.City",
+        "pk": 2,
+        "fields": {
+            "name": "City 2"
+        }
+    }
+]

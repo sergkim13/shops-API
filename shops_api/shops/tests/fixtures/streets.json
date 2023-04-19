@@ -1,0 +1,34 @@
+[
+    {
+        "model": "shops.Street",
+        "pk": 1,
+        "fields": {
+            "name": "Street 1",
+            "city": 1
+        }
+    },
+    {
+        "model": "shops.Street",
+        "pk": 2,
+        "fields": {
+            "name": "Street 2",
+            "city": 1
+        }
+    },
+    {
+        "model": "shops.Street",
+        "pk": 3,
+        "fields": {
+            "name": "Street 3",
+            "city": 2
+        }
+    },
+    {
+        "model": "shops.Street",
+        "pk": 4,
+        "fields": {
+            "name": "Street 4",
+            "city": 2
+        }
+    }
+]

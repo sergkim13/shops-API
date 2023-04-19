@@ -19,7 +19,7 @@ class ShopFilter(FilterSet):
             city_id = int(value)
             return queryset.filter(city_id=city_id)
         except ValueError:
-            city_name = value.strip().capitalize()
+            city_name = ' '.join([word.capitalize() for word in value.strip().split()])
             return queryset.filter(city__name__iexact=city_name)
 
     street = CharFilter(field_name='street', method='filter_by_street')
@@ -29,16 +29,16 @@ class ShopFilter(FilterSet):
             street_id = int(value)
             return queryset.filter(street_id=street_id)
         except ValueError:
-            street_name = value.strip().capitalize()
+            street_name = ' '.join([word.capitalize() for word in value.strip().split()])
             return queryset.filter(street__name__iexact=street_name)
 
     def filter_by_open(self, queryset, name, value):
         now = timezone.now().time()
         value = int(value)
         if value:
-            return queryset.filter(opening_time__lte=now).filter(closing_time__gte=now)
+            return queryset.filter(opening_time__lte=now, closing_time__gte=now)
         else:
-            return queryset.exclude(opening_time__lte=now).exclude(closing_time__gte=now)
+            return queryset.exclude(opening_time__lte=now, closing_time__gte=now)
 
     class Meta:
         model = Shop
