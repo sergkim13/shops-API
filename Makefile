@@ -16,5 +16,11 @@ compose:
 stop:
 	docker compose down
 
+compose-test:
+	docker compose -f docker-compose.test.yaml -p testing up -d
+
+stop-test:
+	docker compose -f docker-compose.test.yaml -p testing down
+
 migrate:
 	poetry run python manage.py migrate

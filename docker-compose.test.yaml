@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  shops_api:
+    container_name: shops_api
+    env_file:
+      - .env
+    environment:
+      DB_HOST: 'app_db'
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: >
+      sh -c "
+        echo 'Launching tests...' &&
+        python3 manage.py test
+      "
+    networks:
+      - prod_network
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    depends_on:
+      app_db:
+        condition: service_healthy
+
+  app_db:
+    container_name: app_db
+    image: postgres:15.1-alpine
+    volumes:
+      - psql:/var/lib/postgresql/data/
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    env_file:
+      - .env
+    expose:
+      - 5432
+    ports:
+      - '5432:5432'
+    networks:
+      - prod_network
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DB_USER} -d ${DB_NAME}'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+networks:
+  prod_network:
+    name: prod_network
+    driver: bridge
+
+volumes:
+  psql:
