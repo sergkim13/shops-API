@@ -1,7 +1,7 @@
 from django.utils import timezone
-from django_filters import FilterSet, CharFilter, ChoiceFilter
-from shops_api.shops.models import Shop
+from django_filters import CharFilter, ChoiceFilter, FilterSet
 
+from shops_api.shops.models import Shop
 
 STATUS_CHOICES = (
     (0, 'Shop is closed'),

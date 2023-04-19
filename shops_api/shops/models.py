@@ -32,7 +32,6 @@ class Shop(models.Model):
     opening_time = models.TimeField(verbose_name='opening_time')
     closing_time = models.TimeField(verbose_name='closing_time')
 
-
     class Meta:
         verbose_name = 'shop'
         verbose_name_plural = 'shops'

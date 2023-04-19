@@ -1,10 +1,10 @@
-from rest_framework import generics
-from rest_framework import status
-from rest_framework.response import Response
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import generics, status
+from rest_framework.response import Response
+
 from shops_api.shops.filters import ShopFilter
 from shops_api.shops.models import City, Shop, Street
-from shops_api.shops.serializers import CitySerializer, StreetSerializer, ShopSerializer
+from shops_api.shops.serializers import CitySerializer, ShopSerializer, StreetSerializer
 
 
 class CityAPIListView(generics.ListAPIView):

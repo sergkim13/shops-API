@@ -1,6 +1,6 @@
 from django.urls import path
 
-from shops_api.shops.views import CityAPIListView, StreetAPIListView, ShopAPIView
+from shops_api.shops.views import CityAPIListView, ShopAPIView, StreetAPIListView
 
 urlpatterns = [
     path('cities/', CityAPIListView.as_view(), name='cities'),

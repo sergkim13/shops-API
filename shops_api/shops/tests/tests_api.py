@@ -1,8 +1,5 @@
-from datetime import datetime
 from http import HTTPStatus
-from django.test.utils import override_settings
-from zoneinfo import ZoneInfo
-from django.utils import timezone
+
 from django.urls import reverse
 from freezegun import freeze_time
 from rest_framework.test import APITestCase
@@ -62,7 +59,7 @@ class ShopAPITestCase(APITestCase):
         self.assertEqual(expected_data_2, response_2.data)
         self.assertEqual([], response_3.data)
 
-    @freeze_time("2023-04-18 19:30")
+    @freeze_time('2023-04-18 19:30')
     def test_get_shops(self):
         url = reverse('shops')
         response_1 = self.client.get(url)

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from shops_api.shops.models import Shop, City, Street
+from shops_api.shops.models import City, Shop, Street
 
 
 @admin.register(Shop)
@@ -27,7 +27,6 @@ class CityAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-
 @admin.register(Street)
 class StreetAdmin(admin.ModelAdmin):
     """
@@ -37,4 +36,4 @@ class StreetAdmin(admin.ModelAdmin):
     search_fields = ('name', 'city')
     list_filter = (
         ('city', admin.RelatedOnlyFieldListFilter),
-        )
+    )
