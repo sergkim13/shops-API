@@ -1,5 +1,7 @@
 # Shops_API
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/d1b4ab87b3b341ea48fa/maintainability)](https://codeclimate.com/github/sergkim13/shops_API/maintainability)
+
 ### Description:
 Test assignmentfor Mediasoft.team.
 Shops_API for creating and getting info about shops. Made with Django Rest Framework.

@@ -1,0 +1,40 @@
+name: Project CI
+
+on: push
+
+jobs:
+  container-job:
+    runs-on: ubuntu-latest
+    container: node:10.18-jessie
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
+      - run: pipx install poetry==1.2.0
+      - run: make install
+      - name: run pre-commit hooks
+        run: make hooks
+      - name: run tests
+        env:
+          DB_ENGINE: postgres
+          DB_NAME: test_db
+          DB_USER: test_user
+          DB_PASSWORD: postgres
+          DB_HOST: 0.0.0.0
+          DB_PORT: 5432
+        run: make test
