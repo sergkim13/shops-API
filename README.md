@@ -14,7 +14,7 @@ Shops_API for creating and getting info about shops. Made with Django Rest Frame
 3. `Make` utily for MacOS, Linux.
 
 ### Install:
-1. Clone repository: https://github.com/sergkim13/countries_telegram_bot
+1. Clone repository: https://github.com/sergkim13/shops-API
 2. Create `.env` and fill it up according to `.env.example`.
 3. Type `make install` (`Poetry`) or `pip install -r requirements.txt`  to install dependencies to your virtual environment.
 4. Type `make compose` for running application in docker container. Type `make stop` to stop app container.
